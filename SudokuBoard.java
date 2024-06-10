@@ -10,9 +10,12 @@ public class SudokuBoard {
     private int[][] board;
     private int[][] initialBoard;
     private DifficultyLevel difficultyLevel;
-    private Random random;
+    private Random random = new Random();
 
     public SudokuBoard(DifficultyLevel difficultyLevel) {
+        if (difficultyLevel == null) {
+            throw new IllegalArgumentException("Difficulty level cannot be null");
+        }
         this.difficultyLevel = difficultyLevel;
         board = new int[9][9];
         initialBoard = new int[9][9];
@@ -23,7 +26,7 @@ public class SudokuBoard {
         SudokuGenerator generator = new SudokuGenerator();
         generator.generateCompleteBoard(board);
         generator.removeNumbersForDifficulty(board, difficultyLevel);
-        System.arraycopy(board, 0, initialBoard, 0, 9);
+        System.arraycopy(board, 0, initialBoard, 0, board.length);
     }
 
     public boolean isValidMove(int row, int col, int number) {
@@ -58,9 +61,9 @@ public class SudokuBoard {
     }
 
     public void resetBoard() {
-        System.arraycopy(initialBoard, 0, board, 0, 9);
+        System.arraycopy(initialBoard, 0, board, 0, board.length);
     }
-    
+
     public void removeNumbersToMatch(int targetBlanks) {
         int currentBlanks = getBlankCount();
         while (currentBlanks < targetBlanks) {

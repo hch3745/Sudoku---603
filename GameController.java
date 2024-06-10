@@ -8,13 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 
-/**
- *
- * @author kevin
- */
 public class GameController {
     private GameView view;
-    private GridView color;
+    private GridView color; // This is the field that might be null
     private SudokuBoard model;
     private User user;
     private JFrame parentFrame;
@@ -24,8 +20,9 @@ public class GameController {
         this.parentFrame = parentFrame;
         this.user = user;
         this.view = new GameView();
+        this.color = view.getGridView(); // Initialize color with the GridView from GameView
 
-        DifficultyLevel selectedDifficulty = (gameState != null) ? promptForDifficulty() : null;
+        DifficultyLevel selectedDifficulty = (gameState == null) ? promptForDifficulty() : null;
         this.model = new SudokuBoard(selectedDifficulty);
         this.lives = (gameState != null) ? gameState.getLivesLeft() : 3;
 
@@ -51,13 +48,13 @@ public class GameController {
     private void handleCellInput(int row, int col, int number) {
         if (model.isValidMove(row, col, number)) {
             model.setNumber(row, col, number);
-            color.setCellColor(row, col, true);
+            color.setCellColor(row, col, true); // Use color to set cell color
             if (model.isComplete()) {
                 view.showMessage("Congratulations! You've completed the puzzle.");
                 handleRestart();
             }
         } else {
-            color.setCellColor(row, col, false);
+            color.setCellColor(row, col, false); // Use color to set cell color
             lives--;
             updateView();
             if (lives <= 0) {
@@ -69,7 +66,7 @@ public class GameController {
 
     private void handleSave() {
         try {
-            user.saveProgress(model.getBlankCount(), lives); //, model.getNumberOfWrongAnswers()
+            user.saveProgress(model.getBlankCount(), lives);
             view.showMessage("Game saved successfully!");
         } catch (SQLException e) {
             view.showMessage("Error saving game: " + e.getMessage());

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 
 public class SudokuGenerator {
-
     private Random random = new Random();
 
     public void generateCompleteBoard(int[][] board) {
@@ -40,6 +39,10 @@ public class SudokuGenerator {
     }
 
     public void removeNumbersForDifficulty(int[][] board, DifficultyLevel difficulty) {
+        if (difficulty == null) {
+            throw new IllegalArgumentException("Difficulty level cannot be null");
+        }
+
         int cellsToRemove;
         switch (difficulty) {
             case EASY:

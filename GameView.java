@@ -55,8 +55,12 @@ public class GameView extends JPanel {
         quitButton.addActionListener(e -> listener.run());
     }
 
-    public void addCellListener(CellListener listener) {
+    public void addCellListener(GameView.CellListener listener) {
         gridView.setCellListener(listener);
+    }
+
+    public GridView getGridView() {
+        return gridView;
     }
 
     public interface CellListener {
