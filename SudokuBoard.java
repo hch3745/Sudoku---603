@@ -7,6 +7,7 @@ package sud;
 import java.util.Random;
 
 public class SudokuBoard {
+
     private int[][] board;
     private int[][] initialBoard;
     private DifficultyLevel difficultyLevel;
@@ -40,7 +41,9 @@ public class SudokuBoard {
     public boolean isComplete() {
         for (int[] row : board) {
             for (int cell : row) {
-                if (cell == 0) return false;
+                if (cell == 0) {
+                    return false;
+                }
             }
         }
         return true;
@@ -50,7 +53,9 @@ public class SudokuBoard {
         int count = 0;
         for (int[] row : board) {
             for (int cell : row) {
-                if (cell == 0) count++;
+                if (cell == 0) {
+                    count++;
+                }
             }
         }
         return count;
@@ -74,5 +79,9 @@ public class SudokuBoard {
                 currentBlanks++;
             }
         }
+    }
+
+    public DifficultyLevel getDifficultyLevel() {
+        return difficultyLevel;
     }
 }

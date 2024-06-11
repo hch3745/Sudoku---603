@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SudokuApp {
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
@@ -16,6 +17,9 @@ public class SudokuApp {
                 e.printStackTrace();
             }
 
+            /*DatabaseManager.dropAndRecreateTable("SAVED_GAMES");
+
+        DatabaseManager.initializeDatabase();*/
             DatabaseManager.initializeDatabase();
 
             JFrame frame = new JFrame("Sudoku Game");

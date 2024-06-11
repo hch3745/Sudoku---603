@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 public class GridView extends JPanel {
+
     private SudokuCellView[][] cells;
     private GameView.CellListener cellListener;
 

@@ -12,6 +12,7 @@ import java.sql.SQLException;
  * @author kevin
  */
 public class MainMenuController {
+
     private MainMenuView view;
     private User user;
     private JFrame parentFrame;

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
  * @author kevin
  */
 public class GameView extends JPanel {
+
     private GridView gridView;
     private JLabel livesLabel;
     private JButton saveButton;
@@ -64,6 +65,7 @@ public class GameView extends JPanel {
     }
 
     public interface CellListener {
+
         void onCellInput(int row, int col, int number);
     }
 

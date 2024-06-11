@@ -7,25 +7,19 @@ package sud;
 import java.sql.*;
 
 public class User {
+
     private String username;
 
     public User(String username) {
         this.username = username;
     }
 
-    public void saveProgress(int blankAnswers, int livesLeft) throws SQLException {
+    public void saveProgress(int blankAnswers, int livesLeft, DifficultyLevel difficulty) throws SQLException {
         Connection conn = DatabaseManager.getConnection();
         conn.setAutoCommit(false);
 
         try (
-            PreparedStatement checkGameStmt = conn.prepareStatement("SELECT * FROM SAVED_GAMES WHERE USERNAME = ?");
-            PreparedStatement updateGameStmt = conn.prepareStatement("UPDATE SAVED_GAMES SET BLANK_ANSWERS = ? WHERE USERNAME = ?");
-            PreparedStatement insertGameStmt = conn.prepareStatement("INSERT INTO SAVED_GAMES (USERNAME, BLANK_ANSWERS) VALUES (?, ?)");
-            PreparedStatement checkLivesStmt = conn.prepareStatement("SELECT * FROM LIVES WHERE USERNAME = ?");
-            PreparedStatement updateLivesStmt = conn.prepareStatement("UPDATE LIVES SET LIVES_LEFT = ? WHERE USERNAME = ?");
-            PreparedStatement insertLivesStmt = conn.prepareStatement("INSERT INTO LIVES (USERNAME, LIVES_LEFT) VALUES (?, ?)")
-        ) {
-            // Update or insert game progress
+                 PreparedStatement checkGameStmt = conn.prepareStatement("SELECT * FROM SAVED_GAMES WHERE USERNAME = ?");  PreparedStatement updateGameStmt = conn.prepareStatement("UPDATE SAVED_GAMES SET BLANK_ANSWERS = ? WHERE USERNAME = ?");  PreparedStatement insertGameStmt = conn.prepareStatement("INSERT INTO SAVED_GAMES (USERNAME, BLANK_ANSWERS, DIFFICULTY) VALUES (?, ?, ?)");  PreparedStatement checkLivesStmt = conn.prepareStatement("SELECT * FROM LIVES WHERE USERNAME = ?");  PreparedStatement updateLivesStmt = conn.prepareStatement("UPDATE LIVES SET LIVES_LEFT = ? WHERE USERNAME = ?");  PreparedStatement insertLivesStmt = conn.prepareStatement("INSERT INTO LIVES (USERNAME, LIVES_LEFT) VALUES (?, ?)")) {
             checkGameStmt.setString(1, username);
             ResultSet gameRs = checkGameStmt.executeQuery();
             if (gameRs.next()) {
@@ -35,11 +29,11 @@ public class User {
             } else {
                 insertGameStmt.setString(1, username);
                 insertGameStmt.setInt(2, blankAnswers);
+                insertGameStmt.setString(3, difficulty.name());
                 insertGameStmt.executeUpdate();
             }
             gameRs.close();
 
-            // Update or insert lives
             checkLivesStmt.setString(1, username);
             ResultSet livesRs = checkLivesStmt.executeQuery();
             if (livesRs.next()) {
@@ -64,9 +58,7 @@ public class User {
 
     public GameState loadProgress() throws SQLException {
         try (
-            PreparedStatement pstmt1 = DatabaseManager.getConnection().prepareStatement("SELECT BLANK_ANSWERS FROM SAVED_GAMES WHERE USERNAME = ?");
-            PreparedStatement pstmt2 = DatabaseManager.getConnection().prepareStatement("SELECT LIVES_LEFT FROM LIVES WHERE USERNAME = ?")
-        ) {
+                 PreparedStatement pstmt1 = DatabaseManager.getConnection().prepareStatement("SELECT BLANK_ANSWERS, DIFFICULTY FROM SAVED_GAMES WHERE USERNAME = ?");  PreparedStatement pstmt2 = DatabaseManager.getConnection().prepareStatement("SELECT LIVES_LEFT FROM LIVES WHERE USERNAME = ?")) {
             pstmt1.setString(1, username);
             ResultSet rs1 = pstmt1.executeQuery();
 
@@ -76,7 +68,8 @@ public class User {
             if (rs1.next() && rs2.next()) {
                 int blankAnswers = rs1.getInt("BLANK_ANSWERS");
                 int livesLeft = rs2.getInt("LIVES_LEFT");
-                return new GameState(blankAnswers, livesLeft);
+                DifficultyLevel difficulty = DifficultyLevel.valueOf(rs1.getString("DIFFICULTY"));
+                return new GameState(blankAnswers, livesLeft, difficulty);
             }
         }
         return null;

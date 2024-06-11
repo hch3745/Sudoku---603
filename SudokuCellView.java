@@ -16,6 +16,7 @@ import javax.swing.JTextField;
  * @author kevin
  */
 public class SudokuCellView extends JTextField {
+
     private boolean isInitialValue;
 
     public SudokuCellView() {

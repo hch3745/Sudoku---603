@@ -12,6 +12,7 @@ import java.sql.SQLException;
  * @author kevin
  */
 public class LoginController {
+
     private LoginView view;
     private UserManager userManager;
     private JFrame parentFrame;

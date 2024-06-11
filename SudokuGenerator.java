@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 public class SudokuGenerator {
+
     private Random random = new Random();
 
     public void generateCompleteBoard(int[][] board) {

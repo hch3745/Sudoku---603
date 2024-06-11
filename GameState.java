@@ -5,19 +5,26 @@
 package sud;
 
 public class GameState {
-    private int blanksCount;
-    private int livesLeft;
 
-    public GameState(int blanksCount, int livesLeft) {
-        this.blanksCount = blanksCount;
+    private int blankAnswers;
+    private int livesLeft;
+    private DifficultyLevel difficulty;
+
+    public GameState(int blankAnswers, int livesLeft, DifficultyLevel difficulty) {
+        this.blankAnswers = blankAnswers;
         this.livesLeft = livesLeft;
+        this.difficulty = difficulty;
     }
 
-    public int getBlanksCount() {
-        return blanksCount;
+    public int getBlankAnswers() {
+        return blankAnswers;
     }
 
     public int getLivesLeft() {
         return livesLeft;
+    }
+
+    public DifficultyLevel getDifficulty() {
+        return difficulty;
     }
 }

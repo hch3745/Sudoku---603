@@ -12,6 +12,7 @@ import java.awt.*;
  * @author kevin
  */
 public class MainMenuView extends JPanel {
+
     private JButton newGameButton;
     private JButton loadGameButton;
     private JButton logoutButton;

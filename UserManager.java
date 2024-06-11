@@ -10,9 +10,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class UserManager {
+
     public void addUser(String username, String password) throws SQLException {
         String hashedPassword = hashPassword(password);
-        try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement("INSERT INTO ACCOUNTS VALUES (?, ?)")) {
+        try ( PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement("INSERT INTO ACCOUNTS VALUES (?, ?)")) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
             pstmt.executeUpdate();
@@ -21,7 +22,7 @@ public class UserManager {
 
     public boolean authenticateUser(String username, String password) throws SQLException {
         String hashedPassword = hashPassword(password);
-        try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement("SELECT * FROM ACCOUNTS WHERE USERNAME = ? AND PASSWORD = ?")) {
+        try ( PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement("SELECT * FROM ACCOUNTS WHERE USERNAME = ? AND PASSWORD = ?")) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
             ResultSet rs = pstmt.executeQuery();

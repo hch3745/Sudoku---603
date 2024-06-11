@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 
 public class GameController {
+
     private GameView view;
     private GridView color; // This is the field that might be null
     private SudokuBoard model;
@@ -20,9 +21,9 @@ public class GameController {
         this.parentFrame = parentFrame;
         this.user = user;
         this.view = new GameView();
-        this.color = view.getGridView(); // Initialize color with the GridView from GameView
+        this.color = view.getGridView();
 
-        DifficultyLevel selectedDifficulty = (gameState == null) ? promptForDifficulty() : null;
+        DifficultyLevel selectedDifficulty = (gameState == null) ? promptForDifficulty() : gameState.getDifficulty();
         this.model = new SudokuBoard(selectedDifficulty);
         this.lives = (gameState != null) ? gameState.getLivesLeft() : 3;
 
@@ -32,15 +33,15 @@ public class GameController {
         view.addCellListener(this::handleCellInput);
 
         if (gameState != null) {
-            model.removeNumbersToMatch(gameState.getBlanksCount());
+            model.removeNumbersToMatch(gameState.getBlankAnswers());
         }
         updateView();
     }
 
     private DifficultyLevel promptForDifficulty() {
         DifficultyLevel selectedDifficulty = (DifficultyLevel) JOptionPane.showInputDialog(
-            parentFrame, "Select difficulty level:", "Difficulty Selection",
-            JOptionPane.QUESTION_MESSAGE, null, DifficultyLevel.values(), DifficultyLevel.MEDIUM
+                parentFrame, "Select difficulty level:", "Difficulty Selection",
+                JOptionPane.QUESTION_MESSAGE, null, DifficultyLevel.values(), DifficultyLevel.MEDIUM
         );
         return (selectedDifficulty == null) ? DifficultyLevel.MEDIUM : selectedDifficulty;
     }
@@ -66,7 +67,7 @@ public class GameController {
 
     private void handleSave() {
         try {
-            user.saveProgress(model.getBlankCount(), lives);
+            user.saveProgress(model.getBlankCount(), lives, model.getDifficultyLevel());
             view.showMessage("Game saved successfully!");
         } catch (SQLException e) {
             view.showMessage("Error saving game: " + e.getMessage());

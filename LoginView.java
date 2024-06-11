@@ -6,11 +6,13 @@ package sud;
 
 import javax.swing.*;
 import java.awt.*;
+
 /**
  *
  * @author kevin
  */
 public class LoginView extends JFrame {
+
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton registerButton;
@@ -56,4 +58,3 @@ public class LoginView extends JFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 }
-
