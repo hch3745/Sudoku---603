@@ -7,10 +7,7 @@ package sud;
 import javax.swing.JFrame;
 import java.sql.SQLException;
 
-/**
- *
- * @author kevin
- */
+
 public class MainMenuController {
 
     private MainMenuView view;
@@ -27,14 +24,16 @@ public class MainMenuController {
         view.addLogoutListener(this::handleLogout);
         view.addQuitListener(this::handleQuit);
     }
-
+    
+    // Starts a new game
     private void handleNewGame() {
         parentFrame.getContentPane().removeAll();
         parentFrame.add(new GameController(parentFrame, user, null).getView());
         parentFrame.revalidate();
         parentFrame.repaint();
     }
-
+    
+    // Loads a saved game
     private void handleLoadGame() {
         try {
             GameState gameState = user.loadProgress();
@@ -50,19 +49,22 @@ public class MainMenuController {
             view.showMessage("Error loading game: " + e.getMessage());
         }
     }
-
+    
+    // Logs out the user and shows the login view
     private void handleLogout() {
         parentFrame.getContentPane().removeAll();
         new LoginController(parentFrame).showLoginView();
         parentFrame.revalidate();
         parentFrame.repaint();
     }
-
+    
+    // Quits the application
     private void handleQuit() {
         DatabaseManager.disconnect();
         System.exit(0);
     }
-
+    
+    // Getter and setter methods for the main menu view
     public MainMenuView getView() {
         return view;
     }

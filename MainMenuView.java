@@ -7,10 +7,6 @@ package sud;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- *
- * @author kevin
- */
 public class MainMenuView extends JPanel {
 
     private JButton newGameButton;
@@ -30,7 +26,8 @@ public class MainMenuView extends JPanel {
         add(logoutButton);
         add(quitButton);
     }
-
+    
+    // Event listener methods for new game, load game, logout, and quit
     public void addNewGameListener(Runnable listener) {
         newGameButton.addActionListener(e -> listener.run());
     }
@@ -46,7 +43,8 @@ public class MainMenuView extends JPanel {
     public void addQuitListener(Runnable listener) {
         quitButton.addActionListener(e -> listener.run());
     }
-
+    
+    // Shows a message dialog
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }

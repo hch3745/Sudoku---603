@@ -21,7 +21,8 @@ public class LoginController {
         this.parentFrame = parentFrame;
         this.userManager = new UserManager();
     }
-
+    
+    // Shows the login view
     public void showLoginView() {
         view = new LoginView();
         view.setVisible(true);
@@ -29,7 +30,8 @@ public class LoginController {
         view.addRegisterListener(this::handleRegister);
         view.addLoginListener(this::handleLogin);
     }
-
+    
+    // Handles user registration
     private void handleRegister() {
         String username = view.getUsername();
         String password = view.getPassword();
@@ -46,7 +48,8 @@ public class LoginController {
             view.showMessage("Error registering user: " + e.getMessage());
         }
     }
-
+    
+    // Handles user login
     private void handleLogin() {
         String username = view.getUsername();
         String password = view.getPassword();
@@ -63,7 +66,8 @@ public class LoginController {
             view.showMessage("Error logging in: " + e.getMessage());
         }
     }
-
+    
+    // Shows the main menu after successful login
     private void showMainMenu(User user) {
         MainMenuController mainMenuController = new MainMenuController(parentFrame, user);
         parentFrame.getContentPane().removeAll();

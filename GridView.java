@@ -25,7 +25,12 @@ public class GridView extends JPanel {
                 final int r = row, c = col;
                 cells[row][col].addActionListener(e -> {
                     String input = cells[r][c].getText();
-                    int number = input.isEmpty() ? 0 : Integer.parseInt(input);
+                    int number;
+                    try {
+                        number = Integer.parseInt(input);
+                    } catch (NumberFormatException ex) {
+                        number = -1; // Set to an invalid number to handle it as an incorrect input
+                    }
                     if (cellListener != null) {
                         cellListener.onCellInput(r, c, number);
                     }
@@ -34,7 +39,8 @@ public class GridView extends JPanel {
             }
         }
     }
-
+    
+    // Updates the grid view with the current board state
     public void updateGrid(SudokuBoard board) {
         int[][] boardState = board.getBoard();
         for (int row = 0; row < 9; row++) {
@@ -44,11 +50,13 @@ public class GridView extends JPanel {
             }
         }
     }
-
+    
+    // Sets the cell listener for handling user input
     public void setCellListener(GameView.CellListener listener) {
         this.cellListener = listener;
     }
-
+    
+    // Sets the color of a cell based on the user input
     public void setCellColor(int row, int col, boolean isCorrect) {
         cells[row][col].setInputColor(isCorrect);
     }

@@ -11,10 +11,6 @@ import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
-/**
- *
- * @author kevin
- */
 public class SudokuCellView extends JTextField {
 
     private boolean isInitialValue;
@@ -25,7 +21,8 @@ public class SudokuCellView extends JTextField {
         setFont(new Font("Arial", Font.PLAIN, 20));
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
-
+    
+    // Sets the value and appearance of the cell
     public void setValue(int value, boolean isInitial) {
         this.isInitialValue = isInitial;
         setText(value == 0 ? "" : String.valueOf(value));
@@ -33,13 +30,15 @@ public class SudokuCellView extends JTextField {
         setFocusable(!isInitial);
         setBackground(isInitial ? Color.LIGHT_GRAY : Color.WHITE);
     }
-
+    
+    // Sets the background color of the cell based on the input correctness
     public void setInputColor(boolean isCorrect) {
         if (!isInitialValue) {
             setBackground(isCorrect ? Color.GREEN : Color.RED);
         }
     }
-
+    
+    // Overrides the paintComponent method to customize the cell appearance
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

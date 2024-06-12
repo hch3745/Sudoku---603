@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package sud;
 
 import java.sql.*;
@@ -12,8 +9,9 @@ public class DatabaseManager {
     private static final String USER = "sud";
     private static final String PASS = "sud";
     private static Connection conn;
-
-    public static void initializeDatabase() {
+    
+    // Connects to the database and creates the required table
+    public static void initializeDatabase() { 
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             createTables();
@@ -26,8 +24,9 @@ public class DatabaseManager {
         DatabaseManager dbi = new DatabaseManager();
         System.out.println(dbi.getConnection());
     }
-
-    private static void createTables() throws SQLException {
+    
+    // Creates the ACCOUNTS, SAVED_GAMES, and LIVES tables if they don't exist
+    private static void createTables() throws SQLException { 
         try ( Statement stmt = conn.createStatement()) {
             createAccountTable(stmt);
             createSavedGamesTable(stmt);
@@ -41,36 +40,9 @@ public class DatabaseManager {
         }
     }
 
-    /*public static void dropAndRecreateTable(String tableName) {
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement()) {
-        
-        // Drop the table if it exists
-        stmt.execute("DROP TABLE " + tableName);
-        System.out.println("Table " + tableName + " dropped successfully.");
-        
-        // Recreate the table
-        switch (tableName.toUpperCase()) {
-            case "SAVED_GAMES":
-                createSavedGamesTable(stmt);
-                break;
-            // Add cases for other tables if needed
-            default:
-                System.out.println("Unknown table: " + tableName);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-}
-
-private static void createSavedGamesTable(Statement stmt) throws SQLException {
-    stmt.execute("CREATE TABLE SAVED_GAMES (USERNAME VARCHAR(50) PRIMARY KEY, BLANK_ANSWERS INT, DIFFICULTY VARCHAR(50))");
-    System.out.println("Table SAVED_GAMES created successfully.");
-}*/
-    
     private static void createSavedGamesTable(Statement stmt) throws SQLException {
         if (!tableExists("SAVED_GAMES")) {
-            stmt.execute("CREATE TABLE SAVED_GAMES (USERNAME VARCHAR(50) PRIMARY KEY, BLANK_ANSWERS INT, DIFFICULTY VARCHAR(50))");
+            stmt.execute("CREATE TABLE SAVED_GAMES (USERNAME VARCHAR(50) PRIMARY KEY, BLANK_ANSWERS INT)");
         }
     }
 
@@ -79,14 +51,16 @@ private static void createSavedGamesTable(Statement stmt) throws SQLException {
             stmt.execute("CREATE TABLE LIVES (USERNAME VARCHAR(50), LIVES_LEFT INT, FOREIGN KEY (USERNAME) REFERENCES ACCOUNTS(USERNAME))");
         }
     }
-
-    private static boolean tableExists(String tableName) throws SQLException {
+    
+    // Checks if a table with the given name exists in the database
+    private static boolean tableExists(String tableName) throws SQLException { 
         DatabaseMetaData meta = conn.getMetaData();
         try ( ResultSet rs = meta.getTables(null, null, tableName.toUpperCase(), null)) {
             return rs.next();
         }
     }
-
+    
+    // Getter and setter methods for the database connection
     public static Connection getConnection() {
         return conn;
     }

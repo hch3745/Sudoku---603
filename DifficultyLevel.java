@@ -1,13 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sud;
 
-/**
- *
- * @author kevin
- */
 public enum DifficultyLevel {
-    EASY, MEDIUM, HARD
+    EASY(20), MEDIUM(40), HARD(60), CUSTOM(-1);
+
+    private final int blankCells;
+
+    DifficultyLevel(int blankCells) {
+        this.blankCells = blankCells;
+    }
+    
+    // Getter and setter methods for the blank cell count
+    public int getBlankCells() { 
+        return blankCells;
+    }
+    
+    // Determines the difficulty level based on the blank cell count
+    public static DifficultyLevel fromBlankCount(int blankCount) { 
+        for (DifficultyLevel level : values()) {
+            if (level.blankCells == blankCount) {
+                return level;
+            }
+        }
+        return CUSTOM;
+    }
 }

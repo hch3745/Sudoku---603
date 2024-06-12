@@ -5,11 +5,13 @@
 package sud;
 
 public class SudokuValidator {
-
+    
+    // Checks if a move is valid in the current board state
     public static boolean isValidMove(int[][] board, int row, int col, int number) {
         return !isInRow(board, row, number) && !isInColumn(board, col, number) && !isInBox(board, row - row % 3, col - col % 3, number);
     }
-
+    
+    // Helper methods to check row, column, and box validity
     private static boolean isInRow(int[][] board, int row, int number) {
         for (int j = 0; j < 9; j++) {
             if (board[row][j] == number) {

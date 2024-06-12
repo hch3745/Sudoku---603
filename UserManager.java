@@ -11,6 +11,7 @@ import java.util.Base64;
 
 public class UserManager {
 
+    // Adds a new user to the database
     public void addUser(String username, String password) throws SQLException {
         String hashedPassword = hashPassword(password);
         try ( PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement("INSERT INTO ACCOUNTS VALUES (?, ?)")) {
@@ -20,6 +21,7 @@ public class UserManager {
         }
     }
 
+    // Authenticates a user with the provided credentials
     public boolean authenticateUser(String username, String password) throws SQLException {
         String hashedPassword = hashPassword(password);
         try ( PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement("SELECT * FROM ACCOUNTS WHERE USERNAME = ? AND PASSWORD = ?")) {

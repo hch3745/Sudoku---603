@@ -12,7 +12,8 @@ public class SudokuBoard {
     private int[][] initialBoard;
     private DifficultyLevel difficultyLevel;
     private Random random = new Random();
-
+    
+    // Initializes the Sudoku board with the specified difficulty level
     public SudokuBoard(DifficultyLevel difficultyLevel) {
         if (difficultyLevel == null) {
             throw new IllegalArgumentException("Difficulty level cannot be null");
@@ -22,22 +23,26 @@ public class SudokuBoard {
         initialBoard = new int[9][9];
         generateBoard();
     }
-
+    
+    // Generates a new Sudoku board
     public void generateBoard() {
         SudokuGenerator generator = new SudokuGenerator();
         generator.generateCompleteBoard(board);
         generator.removeNumbersForDifficulty(board, difficultyLevel);
         System.arraycopy(board, 0, initialBoard, 0, board.length);
     }
-
+    
+    // Checks if a move is valid in the current board state
     public boolean isValidMove(int row, int col, int number) {
         return SudokuValidator.isValidMove(board, row, col, number);
     }
-
+    
+    // Sets a number in the board at the specified position
     public void setNumber(int row, int col, int number) {
         board[row][col] = number;
     }
-
+    
+    // Checks if the board is complete (all cells filled)
     public boolean isComplete() {
         for (int[] row : board) {
             for (int cell : row) {
@@ -48,7 +53,8 @@ public class SudokuBoard {
         }
         return true;
     }
-
+    
+    // Gets the count of blank cells in the board
     public int getBlankCount() {
         int count = 0;
         for (int[] row : board) {
@@ -60,7 +66,8 @@ public class SudokuBoard {
         }
         return count;
     }
-
+    
+    // Getter and setter methods for the board and difficulty level
     public int[][] getBoard() {
         return board;
     }
@@ -68,7 +75,8 @@ public class SudokuBoard {
     public void resetBoard() {
         System.arraycopy(initialBoard, 0, board, 0, board.length);
     }
-
+    
+    // Removes numbers from the board to match the target number of blank cells
     public void removeNumbersToMatch(int targetBlanks) {
         int currentBlanks = getBlankCount();
         while (currentBlanks < targetBlanks) {
@@ -76,6 +84,7 @@ public class SudokuBoard {
             int col = random.nextInt(9);
             if (board[row][col] != 0 && initialBoard[row][col] != 0) {
                 board[row][col] = 0;
+                initialBoard[row][col] = 0; // Also set initialBoard to 0 to prevent these cells from being filled again
                 currentBlanks++;
             }
         }

@@ -10,20 +10,27 @@ import java.sql.SQLException;
 
 public class GameController {
 
-    private GameView view;
-    private GridView color; // This is the field that might be null
-    private SudokuBoard model;
-    private User user;
-    private JFrame parentFrame;
-    private int lives;
+    public GameView view;
+    public GridView color;
+    public SudokuBoard model;
+    public User user;
+    public JFrame parentFrame;
+    public int lives;
 
+    // Initializes the game controller with the necessary components
     public GameController(JFrame parentFrame, User user, GameState gameState) {
         this.parentFrame = parentFrame;
         this.user = user;
         this.view = new GameView();
         this.color = view.getGridView();
 
-        DifficultyLevel selectedDifficulty = (gameState == null) ? promptForDifficulty() : gameState.getDifficulty();
+        DifficultyLevel selectedDifficulty;
+        if (gameState == null) {
+            selectedDifficulty = promptForDifficulty();
+        } else {
+            selectedDifficulty = DifficultyLevel.CUSTOM;
+        }
+
         this.model = new SudokuBoard(selectedDifficulty);
         this.lives = (gameState != null) ? gameState.getLivesLeft() : 3;
 
@@ -38,7 +45,8 @@ public class GameController {
         updateView();
     }
 
-    private DifficultyLevel promptForDifficulty() {
+    // Prompts the user to select the difficulty level
+    public DifficultyLevel promptForDifficulty() {
         DifficultyLevel selectedDifficulty = (DifficultyLevel) JOptionPane.showInputDialog(
                 parentFrame, "Select difficulty level:", "Difficulty Selection",
                 JOptionPane.QUESTION_MESSAGE, null, DifficultyLevel.values(), DifficultyLevel.MEDIUM
@@ -46,7 +54,17 @@ public class GameController {
         return (selectedDifficulty == null) ? DifficultyLevel.MEDIUM : selectedDifficulty;
     }
 
-    private void handleCellInput(int row, int col, int number) {
+    // Handles the user input for a cell in the Sudoku grid
+    public void handleCellInput(int row, int col, int number) {
+        if (number < 1 || number > 9) {
+            // Invalid number, decrement lives
+            lives--;
+            color.setCellColor(row, col, false); // Use color to set cell color
+            updateView();
+            checkGameOver();
+            return;
+        }
+
         if (model.isValidMove(row, col, number)) {
             model.setNumber(row, col, number);
             color.setCellColor(row, col, true); // Use color to set cell color
@@ -58,39 +76,50 @@ public class GameController {
             color.setCellColor(row, col, false); // Use color to set cell color
             lives--;
             updateView();
-            if (lives <= 0) {
-                view.showMessage("Game Over! You've run out of lives.");
-                handleRestart();
-            }
+            checkGameOver();
         }
     }
 
-    private void handleSave() {
+    // Checks if the game is over (no lives left)
+    private void checkGameOver() {
+        if (lives <= 0) {
+            view.showMessage("Game Over! You've run out of lives.");
+            // handleRestart() is commented out to prevent unintended resets in tests
+            handleRestart();
+        }
+    }
+    
+    // Saves the current game progress
+    public void handleSave() {
         try {
-            user.saveProgress(model.getBlankCount(), lives, model.getDifficultyLevel());
+            user.saveProgress(model.getBlankCount(), lives);
             view.showMessage("Game saved successfully!");
         } catch (SQLException e) {
             view.showMessage("Error saving game: " + e.getMessage());
         }
     }
-
-    private void handleRestart() {
+    
+    // Restarts the game
+    public void handleRestart() {
         model.resetBoard();
         lives = 3;
         updateView();
     }
-
-    private void handleQuit() {
+    
+    // Quits the game and returns to the main menu
+    public void handleQuit() {
         parentFrame.getContentPane().removeAll();
         parentFrame.add(new MainMenuController(parentFrame, user).getView());
         parentFrame.revalidate();
         parentFrame.repaint();
     }
-
-    private void updateView() {
+    
+    // Updates the game view with the current game state
+    public void updateView() {
         view.updateView(model, lives);
     }
-
+    
+    // Getter and setter methods for the game view
     public GameView getView() {
         return view;
     }

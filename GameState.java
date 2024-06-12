@@ -8,23 +8,18 @@ public class GameState {
 
     private int blankAnswers;
     private int livesLeft;
-    private DifficultyLevel difficulty;
 
-    public GameState(int blankAnswers, int livesLeft, DifficultyLevel difficulty) {
+    public GameState(int blankAnswers, int livesLeft) {
         this.blankAnswers = blankAnswers;
         this.livesLeft = livesLeft;
-        this.difficulty = difficulty;
     }
-
+    
+    // Getter and setter methods for the blank answers and lives left
     public int getBlankAnswers() {
         return blankAnswers;
     }
 
     public int getLivesLeft() {
         return livesLeft;
-    }
-
-    public DifficultyLevel getDifficulty() {
-        return difficulty;
     }
 }

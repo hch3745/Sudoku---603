@@ -11,11 +11,13 @@ import java.util.Random;
 public class SudokuGenerator {
 
     private Random random = new Random();
-
+    
+    // Generates a complete Sudoku board
     public void generateCompleteBoard(int[][] board) {
         solveSudoku(board);
     }
-
+    
+    // Recursive helper method to solve the Sudoku board
     private boolean solveSudoku(int[][] board) {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -38,25 +40,16 @@ public class SudokuGenerator {
         }
         return true;
     }
-
+  
+    // Removes numbers from the board based on the specified difficulty level
     public void removeNumbersForDifficulty(int[][] board, DifficultyLevel difficulty) {
         if (difficulty == null) {
             throw new IllegalArgumentException("Difficulty level cannot be null");
         }
 
-        int cellsToRemove;
-        switch (difficulty) {
-            case EASY:
-                cellsToRemove = 20;
-                break;
-            case MEDIUM:
-                cellsToRemove = 40;
-                break;
-            case HARD:
-                cellsToRemove = 60;
-                break;
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + difficulty);
+        int cellsToRemove = difficulty.getBlankCells();
+        if (cellsToRemove == -1) { // CUSTOM difficulty
+            return; // Don't remove any cells, they'll be set later
         }
 
         while (cellsToRemove > 0) {

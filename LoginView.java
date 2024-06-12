@@ -7,10 +7,7 @@ package sud;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- *
- * @author kevin
- */
+
 public class LoginView extends JFrame {
 
     private JTextField usernameField;
@@ -37,7 +34,8 @@ public class LoginView extends JFrame {
         add(registerButton);
         add(loginButton);
     }
-
+    
+    // Getter and setter methods for username and password
     public String getUsername() {
         return usernameField.getText();
     }
@@ -45,7 +43,8 @@ public class LoginView extends JFrame {
     public String getPassword() {
         return new String(passwordField.getPassword());
     }
-
+    
+    // Event listener methods for register and login
     public void addRegisterListener(Runnable listener) {
         registerButton.addActionListener(e -> listener.run());
     }
@@ -53,7 +52,8 @@ public class LoginView extends JFrame {
     public void addLoginListener(Runnable listener) {
         loginButton.addActionListener(e -> listener.run());
     }
-
+    
+    // Shows a message dialog
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }

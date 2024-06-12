@@ -10,10 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- *
- * @author kevin
- */
+
 public class GameView extends JPanel {
 
     private GridView gridView;
@@ -38,12 +35,14 @@ public class GameView extends JPanel {
         controlPanel.add(quitButton);
         add(controlPanel, BorderLayout.SOUTH);
     }
-
+    
+    // Updates the game view with the current board and lives
     public void updateView(SudokuBoard board, int lives) {
         gridView.updateGrid(board);
         livesLabel.setText("Lives: " + lives);
     }
-
+    
+    // Event listener methods for save, restart, quit, and cell input
     public void addSaveListener(Runnable listener) {
         saveButton.addActionListener(e -> listener.run());
     }
@@ -59,7 +58,8 @@ public class GameView extends JPanel {
     public void addCellListener(GameView.CellListener listener) {
         gridView.setCellListener(listener);
     }
-
+    
+    // Getter and setter methods for the grid view
     public GridView getGridView() {
         return gridView;
     }
@@ -68,7 +68,8 @@ public class GameView extends JPanel {
 
         void onCellInput(int row, int col, int number);
     }
-
+    
+    // Shows a message dialog
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
